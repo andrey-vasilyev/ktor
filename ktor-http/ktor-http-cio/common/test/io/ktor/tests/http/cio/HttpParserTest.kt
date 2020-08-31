@@ -4,6 +4,7 @@
 
 package io.ktor.tests.http.cio
 
+import io.ktor.http.*
 import io.ktor.http.cio.*
 import io.ktor.http.cio.internals.*
 import io.ktor.utils.io.*
@@ -28,6 +29,22 @@ class HttpParserTest {
             assertEquals(2, headers.size)
             assertEquals("value", headers["name"].toString())
             assertEquals("p1${HTAB}p2 p3", headers["name2"].toString())
+        } finally {
+            headers.release()
+        }
+    }
+
+    @Test
+    fun testParseCookieHeader() = test {
+        val rawHeaders = """
+            Set-Cookie: ___utmvazauvysSB=kDuxSkE; path=/; Max-Age=900
+        """.trimIndent() + "\r\n\r\n"
+
+        val channel = ByteReadChannel(rawHeaders)
+        val headers = parseHeaders(channel)
+
+        try {
+            assertEquals(null, headers[HttpHeaders.SetCookie])
         } finally {
             headers.release()
         }

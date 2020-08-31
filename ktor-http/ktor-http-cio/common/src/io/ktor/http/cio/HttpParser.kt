@@ -116,14 +116,16 @@ internal suspend fun parseHeaders(
             val nameHash = builder.hashCodeLowerCase(nameStart, nameEnd)
 
             val headerEnd = range.end
-            parseHeaderValue(builder, range)
+            val shouldSkipHeader = parseHeaderValue(builder, range)
 
             val valueStart = range.start
             val valueEnd = range.end
             val valueHash = builder.hashCodeLowerCase(valueStart, valueEnd)
             range.start = headerEnd
 
-            headers.put(nameHash, valueHash, nameStart, nameEnd, valueStart, valueEnd)
+            if (!shouldSkipHeader) {
+                headers.put(nameHash, valueHash, nameStart, nameEnd, valueStart, valueEnd)
+            }
         }
 
         return headers
@@ -238,7 +240,11 @@ private fun parseHeaderNameFailed(text: CharArrayBuilder, index: Int, start: Int
     characterIsNotAllowed(text, ch)
 }
 
-internal fun parseHeaderValue(text: CharArrayBuilder, range: MutableRange) {
+/**
+ * Returns [true] if we need to skip this header from the result.
+ */
+internal fun parseHeaderValue(text: CharArrayBuilder, range: MutableRange): Boolean {
+    var skip = false
     val start = range.start
     val end = range.end
     var index = start
@@ -247,7 +253,7 @@ internal fun parseHeaderValue(text: CharArrayBuilder, range: MutableRange) {
 
     if (index >= end) {
         range.start = end
-        return
+        return skip
     }
 
     val valueStart = index
@@ -258,7 +264,7 @@ internal fun parseHeaderValue(text: CharArrayBuilder, range: MutableRange) {
         when {
             ch == HTAB || ch == ' ' -> {
             }
-            ch < ' ' -> characterIsNotAllowed(text, ch)
+            ch < ' ' -> skip = true
             else -> {
                 valueLastIndex = index
             }
@@ -269,6 +275,8 @@ internal fun parseHeaderValue(text: CharArrayBuilder, range: MutableRange) {
 
     range.start = valueStart
     range.end = valueLastIndex + 1
+
+    return skip
 }
 
 private fun noColonFound(text: CharSequence, range: MutableRange): Nothing {
