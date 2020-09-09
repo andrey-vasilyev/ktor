@@ -99,6 +99,13 @@ def check(Object version, String libVersion, String libName) {
     }
 }
 
+def ignoreExplicitApi = [
+    "ktor-client-tests",
+    "ktor-client-json-tests",
+    "ktor-server-test-host",
+    "ktor-server-tests"
+]
+
 apply from: 'gradle/compatibility.gradle'
 
 allprojects {
@@ -160,11 +167,13 @@ allprojects {
         }
     }
 
-
-
     configurations { testOutput }
 
     kotlin {
+        if (!ignoreExplicitApi.contains(project.name)){
+            explicitApi()
+        }
+
         sourceSets.matching { !(it.name in ["jmh", "main", "test"]) }.all {
             def srcDir = name.endsWith("Main") ? "src" : "test"
             def resourcesPrefix = name.endsWith("Test") ? "test-" : ""
@@ -181,10 +190,6 @@ allprojects {
                     useExperimentalAnnotation("io.ktor.server.engine.EngineAPI")
                 }
             }
-        }
-
-        sourceSets.matching({ it.name.contains("Main") }).all { srcSet ->
-            project.ext.set("kotlin.mpp.freeCompilerArgsForSourceSet.${srcSet.name}", "-Xexplicit-api=warning")
         }
     }
 
