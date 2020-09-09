@@ -12,36 +12,36 @@ import java.lang.reflect.*
 import java.util.concurrent.*
 import kotlin.concurrent.*
 
-val numberOfOperations = 10000
-val jmhOptions = OptionsBuilder()
+public val numberOfOperations = 10000
+public val jmhOptions = OptionsBuilder()
         .mode(Mode.Throughput)
         .timeUnit(TimeUnit.MILLISECONDS)
         .resultFormat(ResultFormatType.CSV)
         .forks(1)
 
-class BenchmarkSettings {
+public class BenchmarkSettings {
     var threads = 32
     val profilers = mutableListOf<String>()
     var iterations = 20
     var iterationTime = 1000L
     val benchmarks = mutableListOf<BenchmarkDescriptor>()
 
-    fun profile(name: String) {
+    public fun profile(name: String) {
         profilers.add(name)
     }
 
-    inline fun <reified T : Any> run(method: String? = null) {
+    public inline fun <reified T : Any> run(method: String? = null) {
         add(T::class.java, method)
     }
 
-    fun add(clazz: Class<*>, method: String? = null) {
+    public fun add(clazz: Class<*>, method: String? = null) {
         benchmarks.add(BenchmarkDescriptor(clazz, method))
     }
 }
 
-data class BenchmarkDescriptor(val clazz: Class<*>, val method: String? = null)
+public data class BenchmarkDescriptor(val clazz: Class<*>, val method: String? = null)
 
-fun benchmark(args: Array<String>, configure: BenchmarkSettings.() -> Unit) {
+public fun benchmark(args: Array<String>, configure: BenchmarkSettings.() -> Unit) {
     val options = BenchmarkSettings().apply(configure)
     when (args.firstOrNull()) {
         "daemon" -> runDaemon(options)
@@ -50,7 +50,7 @@ fun benchmark(args: Array<String>, configure: BenchmarkSettings.() -> Unit) {
     }
 }
 
-fun runDaemon(settings: BenchmarkSettings) {
+public fun runDaemon(settings: BenchmarkSettings) {
     val (clazz, method) = settings.benchmarks.singleOrNull() ?: throw IllegalArgumentException("Daemon mode supports only single benchmark")
     println("${clazz.name}.${method ?: "*"}")
     val instance = clazz.getConstructor().newInstance()
@@ -68,7 +68,7 @@ fun runDaemon(settings: BenchmarkSettings) {
     }
 }
 
-fun runProfiler(settings: BenchmarkSettings) {
+public fun runProfiler(settings: BenchmarkSettings) {
     settings.benchmarks.forEach { (clazz, method) ->
         println("${clazz.name}.${method ?: "*"}")
         val instance = clazz.getConstructor().newInstance()
@@ -122,7 +122,7 @@ private fun Any?.executeBenchmarks(benchmarks: List<Method>, iterations: Int) {
     }
 }
 
-fun runJMH(settings: BenchmarkSettings) {
+public fun runJMH(settings: BenchmarkSettings) {
     val options = jmhOptions.apply {
         settings.profilers.forEach {
             addProfiler(it)

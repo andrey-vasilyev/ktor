@@ -9,13 +9,13 @@ import io.ktor.server.benchmarks.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 
-class NettyIntegrationBenchmark : IntegrationBenchmark<NettyApplicationEngine>() {
+public class NettyIntegrationBenchmark : IntegrationBenchmark<NettyApplicationEngine>() {
     override fun createServer(port: Int, main: Application.() -> Unit): NettyApplicationEngine {
         return embeddedServer(Netty, port, module = main)
     }
 }
 
-class NettyAsyncIntegrationBenchmark : AsyncIntegrationBenchmark<NettyApplicationEngine>() {
+public class NettyAsyncIntegrationBenchmark : AsyncIntegrationBenchmark<NettyApplicationEngine>() {
     override fun createServer(port: Int, main: Application.() -> Unit): NettyApplicationEngine {
         return embeddedServer(Netty, port, module = main)
     }

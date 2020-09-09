@@ -27,10 +27,10 @@ private const val SUSPEND_FACTOR: Int = 100 // every 1/100th should suspend
     CoroutineCancellationBenchmark.regularCancellableContinuation  thrpt   20   52,506 ±  5,350  ops/ms
  */
 @State(Scope.Benchmark)
-class CoroutineCancellationBenchmark {
+public class CoroutineCancellationBenchmark {
 
     @Benchmark
-    fun regularCancellableContinuation(): Unit = runBlocking {
+    public fun regularCancellableContinuation(): Unit = runBlocking {
         var continuation: Continuation<Unit>? = null
 
         launch {
@@ -56,7 +56,7 @@ class CoroutineCancellationBenchmark {
 
     @Benchmark
     @OptIn(InternalCoroutinesApi::class)
-    fun customCancellationHandler(): Unit = runBlocking {
+    public fun customCancellationHandler(): Unit = runBlocking {
         var continuation: Continuation<Unit>? = null
 
         launch {
@@ -88,7 +88,7 @@ class CoroutineCancellationBenchmark {
     }
 }
 
-fun main(args: Array<String>) {
+public fun main(args: Array<String>) {
     benchmark(args) {
         threads = 8
         jmhOptions.jvmArgsAppend("-Xmx32m")

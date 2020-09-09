@@ -15,7 +15,7 @@ import java.nio.channels.*
 import java.nio.file.*
 
 @State(Scope.Benchmark)
-class ChannelBenchmarks {
+public class ChannelBenchmarks {
     private final val coreDirectory = File("../ktor-server-core").absoluteFile.normalize()
     private final val smallFile = File(coreDirectory, "build.gradle")
     private final val largeFile = File(coreDirectory, "build").walkTopDown().maxDepth(2).filter {
@@ -27,17 +27,17 @@ class ChannelBenchmarks {
     private val bb: ByteBuffer = ByteBuffer.allocateDirect(8192)
 
     @Benchmark
-    fun directReads(): Int {
+    public fun directReads(): Int {
         return file.readBytes().size
     }
 
     @Benchmark
-    fun directStreamReads(): Int {
+    public fun directStreamReads(): Int {
         return file.inputStream().use { it.readBytes().size }
     }
 
     @Benchmark
-    fun asyncChannelReads(): Long {
+    public fun asyncChannelReads(): Long {
         val channel = AsynchronousFileChannel.open(file.toPath(), StandardOpenOption.READ)
         val buffer = ByteBuffer.allocate(8192)
         var position = 0L
@@ -54,12 +54,12 @@ class ChannelBenchmarks {
     }
 
     @Benchmark
-    fun readChannelReadPacket() = runBlocking(Dispatchers.Unconfined) {
+    public fun readChannelReadPacket() = runBlocking(Dispatchers.Unconfined) {
         file.readChannel().readRemaining().let { val size = it.remaining; it.release(); size }
     }
 
     @Benchmark
-    fun readChannelReads(): Int = runBlocking(Dispatchers.Unconfined) {
+    public fun readChannelReads(): Int = runBlocking(Dispatchers.Unconfined) {
         val ch = file.readChannel(coroutineContext = coroutineContext)
         try {
             val baos = ByteArrayOutputStream(maxOf(8192, ch.availableForRead)) // similar to readBytes
@@ -79,7 +79,7 @@ class ChannelBenchmarks {
     }
 
     @Benchmark
-    fun readChannelReadsSingleRead(): Int = runBlocking(Dispatchers.Unconfined) {
+    public fun readChannelReadsSingleRead(): Int = runBlocking(Dispatchers.Unconfined) {
         val fileSize = file.length().toInt()
         val array = ByteArray(fileSize)
         val ch = file.readChannel(coroutineContext = coroutineContext)
@@ -93,11 +93,11 @@ class ChannelBenchmarks {
     }
 
     @Benchmark
-    fun readChannelStreamReads(): Int =
+    public fun readChannelStreamReads(): Int =
         file.readChannel().toInputStream().readBytes().size
 
     @Benchmark
-    fun nioFileChannelReads(): Int {
+    public fun nioFileChannelReads(): Int {
         val bb: ByteBuffer = this.bb.duplicate()
         var size = 0
         Files.newByteChannel(file.toPath(), StandardOpenOption.READ)!!.use { fc ->
@@ -130,7 +130,7 @@ ChannelBenchmarks.readChannelReads        thrpt   20  2.488 ± 0.040  ops/ms
 ChannelBenchmarks.readChannelStreamReads  thrpt   20  2.064 ± 0.029  ops/ms
 */
 
-fun main(args: Array<String>) {
+public fun main(args: Array<String>) {
     benchmark(args) {
         threads = 1
         run<ChannelBenchmarks>()

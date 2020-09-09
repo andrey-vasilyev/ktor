@@ -13,7 +13,7 @@ import io.netty.util.*
 import kotlinx.coroutines.*
 import io.ktor.utils.io.*
 
-class CIOPlatformBenchmark : PlatformBenchmark() {
+public class CIOPlatformBenchmark : PlatformBenchmark() {
     private var server: HttpServer? = null
 
     private var sayOK = RequestResponseBuilder().apply {
@@ -58,7 +58,7 @@ class CIOPlatformBenchmark : PlatformBenchmark() {
         notFound.release()
     }
 
-    companion object {
+    public companion object {
         private val STATIC_PLAINTEXT = "OK".toByteArray(CharsetUtil.UTF_8)
         private val STATIC_PLAINTEXT_LEN = STATIC_PLAINTEXT.size
     }

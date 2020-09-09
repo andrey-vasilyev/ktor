@@ -10,13 +10,13 @@ import io.ktor.server.cio.*
 import io.ktor.server.cio.backend.*
 import io.ktor.server.engine.*
 
-class CIOIntegrationBenchmark : IntegrationBenchmark<CIOApplicationEngine>() {
+public class CIOIntegrationBenchmark : IntegrationBenchmark<CIOApplicationEngine>() {
     override fun createServer(port: Int, main: Application.() -> Unit): CIOApplicationEngine {
         return embeddedServer(CIO, port, module = main)
     }
 }
 
-class CIOAsyncIntegrationBenchmark : AsyncIntegrationBenchmark<CIOApplicationEngine>() {
+public class CIOAsyncIntegrationBenchmark : AsyncIntegrationBenchmark<CIOApplicationEngine>() {
     override fun createServer(port: Int, main: Application.() -> Unit): CIOApplicationEngine {
         return embeddedServer(CIO, port, module = main)
     }

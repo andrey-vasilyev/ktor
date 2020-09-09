@@ -12,7 +12,7 @@ import java.nio.ByteBuffer
 import java.util.*
 
 @State(Scope.Benchmark)
-class CIOChunkedBenchmark {
+public class CIOChunkedBenchmark {
     private final val data: ByteBuffer = ByteBuffer.allocateDirect(8192)!!
     init {
         val rnd = ByteArray(8192)
@@ -21,7 +21,7 @@ class CIOChunkedBenchmark {
     }
 
     @Benchmark
-    fun encode() = runBlocking(Dispatchers.Unconfined) {
+    public fun encode() = runBlocking(Dispatchers.Unconfined) {
         val bb: ByteBuffer = data.duplicate()
 
         val source = ByteReadChannel(bb)
@@ -35,7 +35,7 @@ class CIOChunkedBenchmark {
     }
 }
 
-fun main(args: Array<String>) {
+public fun main(args: Array<String>) {
     benchmark(args) {
         run<CIOChunkedBenchmark>()
     }

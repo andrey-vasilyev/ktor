@@ -16,7 +16,7 @@ import io.netty.util.*
 import java.net.*
 import java.util.concurrent.*
 
-class NettyPlatformBenchmark : PlatformBenchmark() {
+public class NettyPlatformBenchmark : PlatformBenchmark() {
     private lateinit var channel: Channel
     val eventLoopGroup = NioEventLoopGroup()
 
@@ -50,7 +50,7 @@ class NettyPlatformBenchmark : PlatformBenchmark() {
         }
     }
 
-    class BenchmarkServerHandler internal constructor(service: ScheduledExecutorService) : ChannelInboundHandlerAdapter() {
+    public class BenchmarkServerHandler internal constructor(service: ScheduledExecutorService) : ChannelInboundHandlerAdapter() {
         override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
             when (msg) {
                 is HttpRequest -> try {
