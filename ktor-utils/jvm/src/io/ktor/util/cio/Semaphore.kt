@@ -2,6 +2,8 @@
  * Copyright 2014-2020 JetBrains s.r.o and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
+@file:Suppress("KDocMissingDocumentation")
+
 package io.ktor.util.cio
 
 import kotlinx.coroutines.sync.Semaphore
@@ -11,7 +13,7 @@ import kotlinx.coroutines.sync.Semaphore
     level = DeprecationLevel.WARNING,
     replaceWith = ReplaceWith("Semaphore", "kotlinx.coroutines.sync.Semaphore")
 )
-class Semaphore(val limit: Int) {
+public class Semaphore(public val limit: Int) {
     private val delegate = Semaphore(limit)
 
     @Deprecated(
@@ -19,11 +21,11 @@ class Semaphore(val limit: Int) {
         level = DeprecationLevel.WARNING,
         replaceWith = ReplaceWith("acquire()", "kotlinx.coroutines.sync.Semaphore")
     )
-    suspend fun enter() {
+    public suspend fun enter() {
         delegate.acquire()
     }
 
-    suspend fun acquire() {
+    public suspend fun acquire() {
         delegate.acquire()
     }
 
@@ -32,11 +34,11 @@ class Semaphore(val limit: Int) {
         level = DeprecationLevel.WARNING,
         replaceWith = ReplaceWith("release()", "kotlinx.coroutines.sync.Semaphore")
     )
-    fun leave() {
+    public fun leave() {
         delegate.release()
     }
 
-    fun release() {
+    public fun release() {
         delegate.release()
     }
 }

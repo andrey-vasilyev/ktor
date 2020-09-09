@@ -2,6 +2,8 @@
  * Copyright 2014-2019 JetBrains s.r.o and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
+@file:Suppress("DEPRECATION")
+
 package io.ktor.util
 
 import io.ktor.utils.io.core.*
@@ -13,7 +15,7 @@ import java.nio.channels.*
  * @return number of bytes read (possibly 0) or -1 if EOF
  */
 @InternalAPI
-fun ReadableByteChannel.read(buffer: IoBuffer): Int {
+public fun ReadableByteChannel.read(buffer: IoBuffer): Int {
     if (buffer.writeRemaining == 0) return 0
     var count = 0
 
@@ -30,7 +32,7 @@ fun ReadableByteChannel.read(buffer: IoBuffer): Int {
  * @return number of bytes written (possibly 0)
  */
 @InternalAPI
-fun WritableByteChannel.write(buffer: IoBuffer): Int {
+public fun WritableByteChannel.write(buffer: IoBuffer): Int {
     var count = 0
     buffer.readDirect { bb ->
         count = write(bb)

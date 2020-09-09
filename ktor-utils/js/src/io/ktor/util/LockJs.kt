@@ -4,11 +4,10 @@
 
 package io.ktor.util
 
-import io.ktor.utils.io.core.*
-
+@Suppress("KDocMissingDocumentation")
 @InternalAPI
-actual class Lock {
-    actual fun lock() {}
-    actual fun unlock() {}
-    actual fun close() {}
+public actual class Lock {
+    public actual fun lock() {}
+    public actual fun unlock() {}
+    public actual fun close() {}
 }

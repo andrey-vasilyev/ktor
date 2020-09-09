@@ -4,10 +4,11 @@
 
 package io.ktor.util
 
+@Suppress("KDocMissingDocumentation")
 @InternalAPI
-expect object PlatformUtils {
-    val IS_BROWSER: Boolean
-    val IS_NODE: Boolean
-    val IS_JVM: Boolean
-    val IS_NATIVE: Boolean
+public expect object PlatformUtils {
+    public val IS_BROWSER: Boolean
+    public val IS_NODE: Boolean
+    public val IS_JVM: Boolean
+    public val IS_NATIVE: Boolean
 }
