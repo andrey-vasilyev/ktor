@@ -27,7 +27,7 @@ internal open class ByteBufferChannel(
 ) : ByteChannel, ByteReadChannel, ByteWriteChannel, LookAheadSuspendSession, HasReadSession, HasWriteSession {
 
     // internal constructor for reading of byte buffers
-    constructor(content: ByteBuffer) : this(false, BufferObjectNoPool, 0) {
+    public constructor(content: ByteBuffer) : this(false, BufferObjectNoPool, 0) {
         state = ReadWriteBufferState.Initial(content.slice(), 0).apply {
             capacity.resetForRead()
         }.startWriting()
@@ -2524,7 +2524,7 @@ internal open class ByteBufferChannel(
 
     override fun toString(): String = "ByteBufferChannel(${hashCode()}, $state)"
 
-    companion object {
+    public companion object {
 
         private const val ReservedLongIndex = -8
 
