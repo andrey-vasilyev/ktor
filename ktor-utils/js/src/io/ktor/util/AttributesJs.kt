@@ -9,7 +9,6 @@ package io.ktor.util
  * Create ES specific [Attributes] instance.
  */
 @JsName("AttributesJsFn")
-@Suppress("FunctionName")
 public actual fun Attributes(concurrent: Boolean): Attributes = AttributesJs()
 
 @Suppress("KDocMissingDocumentation")

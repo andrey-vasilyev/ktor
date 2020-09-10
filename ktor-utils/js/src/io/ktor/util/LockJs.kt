@@ -4,7 +4,6 @@
 
 package io.ktor.util
 
-@Suppress("KDocMissingDocumentation")
 @InternalAPI
 public actual class Lock {
     public actual fun lock() {}

@@ -4,7 +4,6 @@
 
 package io.ktor.util
 
-@Suppress("KDocMissingDocumentation")
 public actual object PlatformUtils {
     @KtorExperimentalAPI
     public actual val IS_BROWSER: Boolean = js(

@@ -92,7 +92,6 @@ public class GMTDateParser(private val pattern: String) {
         }
     }
 
-    @Suppress("KDocMissingDocumentation")
     public companion object {
         public const val SECONDS: Char = 's'
         public const val MINUTES: Char = 'm'

@@ -39,5 +39,4 @@ public actual val NetworkAddress.port: Int
 public actual fun NetworkAddress(hostname: String, port: Int): NetworkAddress =
     NetworkAddress(hostname, port, hostname)
 
-@Suppress("KDocMissingDocumentation")
 public actual class UnresolvedAddressException : IllegalArgumentException()

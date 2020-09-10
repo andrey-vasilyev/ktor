@@ -4,5 +4,4 @@
 
 package io.ktor.util
 
-@Suppress("KDocMissingDocumentation")
 public actual fun <T> Set<T>.unmodifiable(): Set<T> = this

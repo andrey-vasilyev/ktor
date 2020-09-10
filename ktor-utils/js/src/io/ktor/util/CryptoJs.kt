@@ -27,7 +27,6 @@ public actual fun generateNonce(): String {
 /**
  * Create [Digest] from specified hash [name].
  */
-@Suppress("FunctionName")
 @InternalAPI
 public actual fun Digest(name: String): Digest = object : Digest {
     private val state = mutableListOf<ByteArray>()
@@ -49,7 +48,6 @@ public actual fun Digest(name: String): Digest = object : Digest {
 
 // Variable is renamed to `_crypto` so it wouldn't clash with existing `crypto` variable.
 // JS IR backend doesn't reserve names accessed inside js("") calls
-@Suppress("ObjectPropertyName", "UnsafeCastFromDynamic")
 private val _crypto: Crypto = if (PlatformUtils.IS_NODE) js("require('crypto')") else js("(crypto ? crypto : msCrypto)")
 
 private external class Crypto {

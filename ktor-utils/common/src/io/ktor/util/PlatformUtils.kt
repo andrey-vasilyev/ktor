@@ -4,7 +4,6 @@
 
 package io.ktor.util
 
-@Suppress("KDocMissingDocumentation")
 @InternalAPI
 public expect object PlatformUtils {
     public val IS_BROWSER: Boolean
