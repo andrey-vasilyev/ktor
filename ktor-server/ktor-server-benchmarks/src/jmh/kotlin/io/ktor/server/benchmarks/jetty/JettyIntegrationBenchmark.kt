@@ -9,13 +9,13 @@ import io.ktor.server.benchmarks.*
 import io.ktor.server.engine.*
 import io.ktor.server.jetty.*
 
-public class JettyIntegrationBenchmark : IntegrationBenchmark<JettyApplicationEngine>() {
+class JettyIntegrationBenchmark : IntegrationBenchmark<JettyApplicationEngine>() {
     override fun createServer(port: Int, main: Application.() -> Unit): JettyApplicationEngine {
         return embeddedServer(Jetty, port, module = main)
     }
 }
 
-public class JettyAsyncIntegrationBenchmark : AsyncIntegrationBenchmark<JettyApplicationEngine>() {
+class JettyAsyncIntegrationBenchmark : AsyncIntegrationBenchmark<JettyApplicationEngine>() {
     override fun createServer(port: Int, main: Application.() -> Unit): JettyApplicationEngine {
         return embeddedServer(Jetty, port, module = main)
     }

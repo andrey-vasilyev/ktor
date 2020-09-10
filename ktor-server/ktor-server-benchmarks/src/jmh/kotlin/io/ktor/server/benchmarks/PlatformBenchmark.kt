@@ -10,30 +10,30 @@ import io.ktor.server.benchmarks.netty.*
 import org.openjdk.jmh.annotations.*
 
 @State(Scope.Benchmark)
-public abstract class PlatformBenchmark {
+abstract class PlatformBenchmark {
     private val httpClient = OkHttpBenchmarkClient()
     private val port = 5678
 
-    public abstract fun runServer(port: Int)
-    public abstract fun stopServer()
+    abstract fun runServer(port: Int)
+    abstract fun stopServer()
 
     @Setup
-    public fun setupServer() {
+    fun setupServer() {
         runServer(port)
     }
 
     @TearDown
-    public fun shutdownServer() {
+    fun shutdownServer() {
         stopServer()
     }
 
     @Setup
-    public fun configureClient() {
+    fun configureClient() {
         httpClient.setup()
     }
 
     @TearDown
-    public fun shutdownClient() {
+    fun shutdownClient() {
         httpClient.shutdown()
     }
 
@@ -42,7 +42,7 @@ public abstract class PlatformBenchmark {
     }
 
     @Benchmark
-    public fun sayOK() {
+    fun sayOK() {
         load("http://localhost:$port/sayOK")
     }
 }
@@ -54,7 +54,7 @@ JettyPlatformBenchmark.sayOK  thrpt   20  42.875 ± 1.089  ops/ms
 NettyPlatformBenchmark.sayOK  thrpt   20  61.736 ± 1.792  ops/ms
 */
 
-public fun main(args: Array<String>) {
+fun main(args: Array<String>) {
     benchmark(args) {
         threads = 32
         run<NettyPlatformBenchmark>()

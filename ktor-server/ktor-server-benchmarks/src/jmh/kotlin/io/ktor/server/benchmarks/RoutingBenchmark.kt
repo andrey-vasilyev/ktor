@@ -13,11 +13,11 @@ import org.openjdk.jmh.annotations.*
 import java.util.concurrent.*
 
 @State(Scope.Benchmark)
-public class RoutingBenchmark {
+class RoutingBenchmark {
     private val testHost: TestApplicationEngine = TestApplicationEngine(createTestEnvironment())
 
     @Setup
-    public fun startServer() {
+    fun startServer() {
         testHost.start()
         testHost.application.routing {
             get("/short") {
@@ -33,22 +33,22 @@ public class RoutingBenchmark {
     }
 
     @TearDown
-    public fun stopServer() {
+    fun stopServer() {
         testHost.stop(0L, 0L)
     }
 
     @Benchmark
-    public fun shortPath() = handle("/short") {
+    fun shortPath() = handle("/short") {
         check(response.content == "short") { "Invalid response" }
     }
 
     @Benchmark
-    public fun longPath() = handle("/plain/path/with/multiple/components") {
+    fun longPath() = handle("/plain/path/with/multiple/components") {
         check(response.content == "long") { "Invalid response" }
     }
 
     @Benchmark
-    public fun paramPath() = handle("/plain/OK/with/parameters/components") {
+    fun paramPath() = handle("/plain/OK/with/parameters/components") {
         check(response.content == "param OK") { "Invalid response" }
     }
 
@@ -68,7 +68,7 @@ RoutingBenchmark.paramPath  thrpt   20   814.574 ± 15.689  ops/ms
 RoutingBenchmark.shortPath  thrpt   20  1022.062 ± 18.937  ops/ms
 */
 
-public fun main(args: Array<String>) {
+fun main(args: Array<String>) {
     benchmark(args) {
         run<RoutingBenchmark>()
     }

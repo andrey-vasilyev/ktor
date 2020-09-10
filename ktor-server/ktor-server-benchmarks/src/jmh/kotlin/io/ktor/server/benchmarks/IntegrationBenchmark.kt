@@ -23,7 +23,7 @@ import java.util.concurrent.*
 
 
 @State(Scope.Benchmark)
-public abstract class IntegrationBenchmark<TEngine : ApplicationEngine> {
+abstract class IntegrationBenchmark<TEngine : ApplicationEngine> {
     private val coreDirectory = File("../ktor-server-core").absoluteFile.normalize()
     private val packageName = IntegrationBenchmark::class.java.`package`.name
     private val classFileName = IntegrationBenchmark::class.simpleName!! + ".class"
@@ -37,11 +37,11 @@ public abstract class IntegrationBenchmark<TEngine : ApplicationEngine> {
 
     private val port = 5678
 
-    public abstract fun createServer(port: Int, main: Application.() -> Unit): TEngine
+    abstract fun createServer(port: Int, main: Application.() -> Unit): TEngine
     protected open val localhost = "http://localhost:$port"
 
     @Setup
-    public fun configureServer() {
+    fun configureServer() {
         val root = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as ch.qos.logback.classic.Logger
         root.level = Level.ERROR
         val okContent = TextContent("OK", ContentType.Text.Plain, HttpStatusCode.OK)
@@ -81,17 +81,17 @@ public abstract class IntegrationBenchmark<TEngine : ApplicationEngine> {
     }
 
     @TearDown
-    public fun shutdownServer() {
+    fun shutdownServer() {
         server.stop(100, 5000, TimeUnit.MILLISECONDS)
     }
 
     @Setup
-    public fun configureClient() {
+    fun configureClient() {
         httpClient.setup()
     }
 
     @TearDown
-    public fun shutdownClient() {
+    fun shutdownClient() {
         httpClient.shutdown()
     }
 
@@ -100,7 +100,7 @@ public abstract class IntegrationBenchmark<TEngine : ApplicationEngine> {
     }
 
     @Benchmark
-    public fun random() {
+    fun random() {
         when (ThreadLocalRandom.current().nextInt(14)) {
             0, 1, 2, 3, 4 -> thinkOK()
             5, 6, 7, 8, 9 -> query()
@@ -110,52 +110,52 @@ public abstract class IntegrationBenchmark<TEngine : ApplicationEngine> {
     }
 
     @Benchmark
-    public fun sayOK() {
+    fun sayOK() {
         load("$localhost/sayOK")
     }
 
     @Benchmark
-    public fun longPath() {
+    fun longPath() {
         load("$localhost/long/path/to/find/issues/with/routing/scalability")
     }
 
     @Benchmark
-    public fun query() {
+    fun query() {
         load("$localhost/query?utm_source=Google&utm_medium=cpc&utm_campaign=ok%2B+plus&utm_content=obshie&message=OK")
     }
 
     @Benchmark
-    public fun thinkOK() {
+    fun thinkOK() {
         load("$localhost/thinkOK")
     }
 
     @Benchmark
-    public fun jarfile() {
+    fun jarfile() {
         load("$localhost/jarfile")
     }
 
     @Benchmark
-    public fun regularClasspathFile() {
+    fun regularClasspathFile() {
         load("$localhost/regularClasspathFile")
     }
 
     @Benchmark
-    public fun smallFile() {
+    fun smallFile() {
         load("$localhost/smallFile")
     }
 
     @Benchmark
-    public fun smallFileSync() {
+    fun smallFileSync() {
         load("$localhost/smallFileSync")
     }
 
     @Benchmark
-    public fun largeFile() {
+    fun largeFile() {
         load("$localhost/largeFile")
     }
 
     @Benchmark
-    public fun largeFileSync() {
+    fun largeFileSync() {
         load("$localhost/largeFileSync")
     }
 }
@@ -215,7 +215,7 @@ i.k.s.b.test.TestIntegrationBenchmark.smallFileSync           thrpt   20   78.31
 i.k.s.b.test.TestIntegrationBenchmark.thinkOK                 thrpt   20  166.843 ± 2.513  ops/ms
 */
 
-public fun main(args: Array<String>) {
+fun main(args: Array<String>) {
     benchmark(args) {
         threads = 32
         run<CIOIntegrationBenchmark>()

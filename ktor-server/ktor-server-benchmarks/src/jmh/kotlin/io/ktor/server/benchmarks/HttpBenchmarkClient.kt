@@ -11,13 +11,13 @@ import org.apache.http.client.methods.*
 import org.apache.http.impl.client.*
 import java.net.*
 
-public interface HttpBenchmarkClient {
-    public fun setup()
-    public fun shutdown()
-    public fun load(url: String)
+interface HttpBenchmarkClient {
+    fun setup()
+    fun shutdown()
+    fun load(url: String)
 }
 
-public class UrlHttpBenchmarkClient : HttpBenchmarkClient {
+class UrlHttpBenchmarkClient : HttpBenchmarkClient {
     override fun setup() {}
     override fun shutdown() {}
     override fun load(url: String) {
@@ -30,7 +30,7 @@ public class UrlHttpBenchmarkClient : HttpBenchmarkClient {
     }
 }
 
-public class ApacheHttpBenchmarkClient : HttpBenchmarkClient {
+class ApacheHttpBenchmarkClient : HttpBenchmarkClient {
     var httpClient: CloseableHttpClient? = null
 
     override fun setup() {
@@ -54,7 +54,7 @@ public class ApacheHttpBenchmarkClient : HttpBenchmarkClient {
     }
 }
 
-public class OkHttpBenchmarkClient : HttpBenchmarkClient {
+class OkHttpBenchmarkClient : HttpBenchmarkClient {
     var httpClient: OkHttpClient? = null
 
     override fun setup() {

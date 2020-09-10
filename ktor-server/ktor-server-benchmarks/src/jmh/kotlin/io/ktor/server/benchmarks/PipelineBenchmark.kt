@@ -15,18 +15,18 @@ import kotlin.coroutines.*
 import kotlin.coroutines.intrinsics.*
 
 @State(Scope.Benchmark)
-public class BaselinePipeline {
+class BaselinePipeline {
     val functions = listOf({ "1" }, { "2" }, { "3" })
     val suspendFunctions = listOf<suspend () -> String>({ "1" }, { "2" }, { "3" })
 
     @Benchmark
-    public fun directCalls(): String {
+    fun directCalls(): String {
         return functions.fold("") { a, b -> a + b() }
     }
 
     @Benchmark
     @OptIn(InternalAPI::class)
-    public fun suspendCalls(): String {
+    fun suspendCalls(): String {
         return runAndEnsureNoSuspensions {
             suspendFunctions.fold("") { a, b -> a + b() }
         }
@@ -49,35 +49,35 @@ private object NoopContinuation : Continuation<Any?> {
 }
 
 @State(Scope.Benchmark)
-public abstract class PipelineBenchmark {
+abstract class PipelineBenchmark {
     val environment = createTestEnvironment()
     val host = TestApplicationEngine(environment).apply { start() }
     val call = TestApplicationCall(host.application, coroutineContext = Dispatchers.Unconfined)
 
     val callPhase = PipelinePhase("Call")
-    public fun pipeline(): Pipeline<String, ApplicationCall> = Pipeline(callPhase)
-    public fun Pipeline<String, ApplicationCall>.intercept(block: PipelineInterceptor<String, ApplicationCall>) = intercept(callPhase, block)
+    fun pipeline(): Pipeline<String, ApplicationCall> = Pipeline(callPhase)
+    fun Pipeline<String, ApplicationCall>.intercept(block: PipelineInterceptor<String, ApplicationCall>) = intercept(callPhase, block)
 
     @OptIn(InternalAPI::class)
-    public fun <T : Any> Pipeline<T, ApplicationCall>.executeBlocking(subject: T) = runAndEnsureNoSuspensions { execute(call, subject) }
+    fun <T : Any> Pipeline<T, ApplicationCall>.executeBlocking(subject: T) = runAndEnsureNoSuspensions { execute(call, subject) }
 
     lateinit var pipeline: Pipeline<String, ApplicationCall>
 
     @Setup(Level.Iteration)
-    public fun createPipeline() {
+    fun createPipeline() {
         pipeline = pipeline()
         pipeline.configure()
     }
 
-    public abstract fun Pipeline<String, ApplicationCall>.configure()
+    abstract fun Pipeline<String, ApplicationCall>.configure()
 
     @Benchmark
-    public fun execute() {
+    fun execute() {
         pipeline.executeBlocking("some")
     }
 }
 
-public open class PipelineFork : PipelineBenchmark() {
+open class PipelineFork : PipelineBenchmark() {
     override fun Pipeline<String, ApplicationCall>.configure() {
         val another = pipeline()
         another.intercept { proceed() }
@@ -88,7 +88,7 @@ public open class PipelineFork : PipelineBenchmark() {
     }
 }
 
-public open class PipelineFork2 : PipelineBenchmark() {
+open class PipelineFork2 : PipelineBenchmark() {
     override fun Pipeline<String, ApplicationCall>.configure() {
         val another = pipeline()
         val double = pipeline()
@@ -104,7 +104,7 @@ public open class PipelineFork2 : PipelineBenchmark() {
     }
 }
 
-public open class PipelineFork2Implicit : PipelineBenchmark() {
+open class PipelineFork2Implicit : PipelineBenchmark() {
     override fun Pipeline<String, ApplicationCall>.configure() {
         val another = pipeline()
         val double = pipeline()
@@ -114,20 +114,20 @@ public open class PipelineFork2Implicit : PipelineBenchmark() {
     }
 }
 
-public open class PipelineAction : PipelineBenchmark() {
+open class PipelineAction : PipelineBenchmark() {
     override fun Pipeline<String, ApplicationCall>.configure() {
         pipeline.intercept { proceed() }
     }
 }
 
-public open class PipelineAction2 : PipelineBenchmark() {
+open class PipelineAction2 : PipelineBenchmark() {
     override fun Pipeline<String, ApplicationCall>.configure() {
         pipeline.intercept { proceed() }
         pipeline.intercept { proceed() }
     }
 }
 
-public open class PipelineAction3 : PipelineBenchmark() {
+open class PipelineAction3 : PipelineBenchmark() {
     override fun Pipeline<String, ApplicationCall>.configure() {
         pipeline.intercept { proceed() }
         pipeline.intercept { proceed() }
@@ -135,7 +135,7 @@ public open class PipelineAction3 : PipelineBenchmark() {
     }
 }
 
-public open class PipelineAction3Implicit : PipelineBenchmark() {
+open class PipelineAction3Implicit : PipelineBenchmark() {
     override fun Pipeline<String, ApplicationCall>.configure() {
         pipeline.intercept { }
         pipeline.intercept { }
@@ -156,7 +156,7 @@ PipelineFork2.execute            thrpt   10   8955.689 ±  227.900  ops/ms
 PipelineFork2Implicit.execute    thrpt   10  11414.864 ±  378.706  ops/ms
  */
 
-public fun main(args: Array<String>) {
+fun main(args: Array<String>) {
     benchmark(args) {
         run<BaselinePipeline>()
         run<PipelineAction>()

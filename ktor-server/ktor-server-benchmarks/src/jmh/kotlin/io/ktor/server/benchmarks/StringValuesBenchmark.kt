@@ -10,21 +10,21 @@ import org.openjdk.jmh.annotations.*
 
 @State(Scope.Benchmark)
 @OptIn(InternalAPI::class)
-public class StringValuesBenchmark {
+class StringValuesBenchmark {
     private val headers = valuesOf("A" to listOf("B"), "C" to listOf("D"))
 
     @Benchmark
-    public fun valuesOfSingle(): StringValues {
+    fun valuesOfSingle(): StringValues {
         return valuesOf("A", "B")
     }
 
     @Benchmark
-    public fun valuesOfMany(): StringValues {
+    fun valuesOfMany(): StringValues {
         return valuesOf("A" to listOf("B"), "C" to listOf("D"))
     }
 
     @Benchmark
-    public fun build(): StringValues {
+    fun build(): StringValues {
         return StringValues.build {
             append("A", "B")
             append("C", "D")
@@ -32,12 +32,12 @@ public class StringValuesBenchmark {
     }
 
     @Benchmark
-    public fun filter(): StringValues {
+    fun filter(): StringValues {
         return headers.filter { _, _ -> true }
     }
 
     @Benchmark
-    public fun compression(): StringValues {
+    fun compression(): StringValues {
         return StringValues.build(true) {
             appendFiltered(headers) { name, _ -> !name.equals(HttpHeaders.ContentLength, true) }
             append(HttpHeaders.ContentEncoding, "deflate")
@@ -54,7 +54,7 @@ StringValuesBenchmark.valuesOfMany    thrpt   10   13795.421 ± 1234.157  ops/ms
 StringValuesBenchmark.valuesOfSingle  thrpt   10  123127.741 ± 2750.144  ops/ms
  */
 
-public fun main(args: Array<String>) {
+fun main(args: Array<String>) {
     benchmark(args) {
         run<StringValuesBenchmark>()
     }

@@ -23,7 +23,7 @@ import java.io.*
 import java.util.concurrent.*
 
 @State(Scope.Group)
-public abstract class AsyncIntegrationBenchmark<TEngine : ApplicationEngine> {
+abstract class AsyncIntegrationBenchmark<TEngine : ApplicationEngine> {
     private val coreDirectory = File("../ktor-server-core").absoluteFile.normalize()
     private val packageName = IntegrationBenchmark::class.java.`package`.name
     private val classFileName = IntegrationBenchmark::class.simpleName!! + ".class"
@@ -37,11 +37,11 @@ public abstract class AsyncIntegrationBenchmark<TEngine : ApplicationEngine> {
 
     private val port = 5678
 
-    public abstract fun createServer(port: Int, main: Application.() -> Unit): TEngine
+    abstract fun createServer(port: Int, main: Application.() -> Unit): TEngine
     protected open val localhost = "http://localhost:$port"
 
     @Setup
-    public fun configureServer() {
+    fun configureServer() {
         val root = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as ch.qos.logback.classic.Logger
         root.level = Level.ERROR
         val okContent = TextContent("OK", ContentType.Text.Plain, HttpStatusCode.OK)
@@ -83,93 +83,93 @@ public abstract class AsyncIntegrationBenchmark<TEngine : ApplicationEngine> {
         Thread.sleep(500)
     }
 
-    public fun load(url: String) = httpClient.submitTask(url)
-    public fun join(control: Control) = httpClient.joinTask(control)
+    fun load(url: String) = httpClient.submitTask(url)
+    fun join(control: Control) = httpClient.joinTask(control)
 
     @TearDown
-    public fun shutdownServer() {
+    fun shutdownServer() {
         httpClient.shutdown()
         server.stop(100, 5000, TimeUnit.MILLISECONDS)
     }
 
     @Benchmark
     @Group("sayOKGroup")
-    public fun sayOKLoad() = load("$localhost/sayOK")
+    fun sayOKLoad() = load("$localhost/sayOK")
 
     @Benchmark
     @Group("longPathGroup")
-    public fun longPathLoad() = load("$localhost/long/path/to/find/issues/with/routing/scalability")
+    fun longPathLoad() = load("$localhost/long/path/to/find/issues/with/routing/scalability")
 
     @Benchmark
     @Group("queryGroup")
-    public fun queryLoad() = load("$localhost/query?utm_source=Google&utm_medium=cpc&utm_campaign=ok%2B+plus&utm_content=obshie&message=OK")
+    fun queryLoad() = load("$localhost/query?utm_source=Google&utm_medium=cpc&utm_campaign=ok%2B+plus&utm_content=obshie&message=OK")
 
     @Benchmark
     @Group("thinkOKGroup")
-    public fun thinkOKLoad() = load("$localhost/thinkOK")
+    fun thinkOKLoad() = load("$localhost/thinkOK")
 
     @Benchmark
     @Group("jarfileGroup")
-    public fun jarfileLoad() = load("$localhost/jarfile")
+    fun jarfileLoad() = load("$localhost/jarfile")
 
     @Benchmark
     @Group("regularClasspathFileGroup")
-    public fun regularClasspathFileLoad() = load("$localhost/regularClasspathFile")
+    fun regularClasspathFileLoad() = load("$localhost/regularClasspathFile")
 
     @Benchmark
     @Group("smallFileGroup")
-    public fun smallFileLoad() = load("$localhost/smallFile")
+    fun smallFileLoad() = load("$localhost/smallFile")
 
     @Benchmark
     @Group("smallFileSyncGroup")
-    public fun smallFileSyncLoad() = load("$localhost/smallFileSync")
+    fun smallFileSyncLoad() = load("$localhost/smallFileSync")
 
     @Benchmark
     @Group("largeFileGroup")
-    public fun largeFileLoad() = load("$localhost/largeFile")
+    fun largeFileLoad() = load("$localhost/largeFile")
 
     @Benchmark
     @Group("largeFileSyncGroup")
-    public fun largeFileSyncLoad() = load("$localhost/largeFileSync")
+    fun largeFileSyncLoad() = load("$localhost/largeFileSync")
 
     @Benchmark
     @Group("sayOKGroup")
-    public fun sayOK(control: Control) = join(control)
+    fun sayOK(control: Control) = join(control)
 
     @Benchmark
     @Group("longPathGroup")
-    public fun longPath(control: Control) = join(control)
+    fun longPath(control: Control) = join(control)
 
     @Benchmark
     @Group("queryGroup")
-    public fun query(control: Control) = join(control)
+    fun query(control: Control) = join(control)
 
     @Benchmark
     @Group("thinkOKGroup")
-    public fun thinkOk(control: Control) = join(control)
+    fun thinkOk(control: Control) = join(control)
 
     @Benchmark
     @Group("jarfileGroup")
-    public fun jarfile(control: Control) = join(control)
+    fun jarfile(control: Control) = join(control)
 
     @Benchmark
     @Group("regularClasspathFileGroup")
-    public fun regularClasspathFile(control: Control) = join(control)
+    fun regularClasspathFile(control: Control) = join(control)
 
     @Benchmark
     @Group("smallFileGroup")
-    public fun smallFile(control: Control) = join(control)
+    fun smallFile(control: Control) = join(control)
 
     @Benchmark
     @Group("largeFileGroup")
-    public fun largeFile(control: Control) = join(control)
+    fun largeFile(control: Control) = join(control)
 
     @Benchmark
     @Group("largeFileSyncGroup")
-    public fun largeFileSync(control: Control) = join(control)
+    fun largeFileSync(control: Control) = join(control)
 }
 
-public fun main(args: Array<String>) {
+fun main(args: Array<String>) {
     benchmark(args) {
         threads = 2
         run<CIOAsyncIntegrationBenchmark>()

@@ -10,7 +10,7 @@ import io.ktor.server.benchmarks.*
 import io.ktor.server.engine.*
 import io.ktor.server.testing.*
 
-public class TestIntegrationBenchmark : IntegrationBenchmark<TestApplicationEngine>() {
+class TestIntegrationBenchmark : IntegrationBenchmark<TestApplicationEngine>() {
 
     override val localhost: String = ""
 

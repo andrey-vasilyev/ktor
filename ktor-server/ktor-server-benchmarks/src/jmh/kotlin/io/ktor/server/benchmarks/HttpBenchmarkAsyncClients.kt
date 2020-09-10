@@ -15,16 +15,16 @@ import org.openjdk.jmh.infra.*
 import java.nio.*
 import java.util.concurrent.atomic.*
 
-public interface AsyncHttpBenchmarkClient {
-    public fun setup()
-    public fun shutdown()
+interface AsyncHttpBenchmarkClient {
+    fun setup()
+    fun shutdown()
 
-    public fun submitTask(url: String)
-    public fun joinTask(control: Control)
+    fun submitTask(url: String)
+    fun joinTask(control: Control)
 }
 
 @OptIn(InternalAPI::class)
-public class KtorBenchmarkClient(val engineFactory: HttpClientEngineFactory<*>) : AsyncHttpBenchmarkClient {
+class KtorBenchmarkClient(val engineFactory: HttpClientEngineFactory<*>) : AsyncHttpBenchmarkClient {
     private val loadLimit = Semaphore(1000)
     private var httpClient: HttpClient? = null
     private val parent = Job()

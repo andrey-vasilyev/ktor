@@ -13,7 +13,7 @@ import java.io.*
 import javax.servlet.*
 import javax.servlet.http.*
 
-public class JettyPlatformBenchmark : PlatformBenchmark() {
+class JettyPlatformBenchmark : PlatformBenchmark() {
     lateinit var server: Server
 
     override fun runServer(port: Int) {
