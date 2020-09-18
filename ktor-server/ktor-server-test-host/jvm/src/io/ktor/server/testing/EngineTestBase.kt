@@ -12,6 +12,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.features.*
 import io.ktor.http.*
+import io.ktor.network.tls.*
 import io.ktor.network.tls.certificates.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
@@ -299,6 +300,9 @@ public abstract class EngineTestBase<TEngine : ApplicationEngine, TConfiguration
             HttpClient(CIO) {
                 engine {
                     https.trustManager = trustManager
+                    if (enableCertVerify) {
+                        https.addKeyStore(keyStore, "changeit".toCharArray())
+                    }
                 }
                 followRedirects = false
                 expectSuccess = false
@@ -344,7 +348,7 @@ public abstract class EngineTestBase<TEngine : ApplicationEngine, TConfiguration
         @BeforeClass
         @JvmStatic
         public fun setupAll() {
-            keyStore = generateCertificate(keyStoreFile, algorithm = "SHA256withECDSA", keySizeInBits = 256)
+            keyStore = generateCertificate(keyStoreFile, algorithm = "SHA256withRSA", keySizeInBits = 4096)
             val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
             tmf.init(keyStore)
             sslContext = SSLContext.getInstance("TLS")

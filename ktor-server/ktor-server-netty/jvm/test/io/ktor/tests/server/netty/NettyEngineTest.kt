@@ -20,6 +20,7 @@ class NettyCompressionTest : CompressionTestSuite<NettyApplicationEngine, NettyA
 class NettyContentTest : ContentTestSuite<NettyApplicationEngine, NettyApplicationEngine.Configuration>(Netty) {
     init {
         enableSsl = true
+        enableCertVerify = true
     }
 
     override fun configure(configuration: NettyApplicationEngine.Configuration) {
@@ -30,6 +31,7 @@ class NettyContentTest : ContentTestSuite<NettyApplicationEngine, NettyApplicati
 class NettyHttpServerTest : HttpServerTestSuite<NettyApplicationEngine, NettyApplicationEngine.Configuration>(Netty) {
     init {
         enableSsl = true
+        enableCertVerify = true
     }
 
     override fun configure(configuration: NettyApplicationEngine.Configuration) {
@@ -42,6 +44,7 @@ class NettySustainabilityTest :
 
     init {
         enableSsl = true
+        enableCertVerify = true
     }
 
     override fun configure(configuration: NettyApplicationEngine.Configuration) {

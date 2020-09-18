@@ -11,7 +11,12 @@ class JettyEngineHttp2CompressionTest :
     CompressionTestSuite<JettyApplicationEngine, JettyApplicationEngineBase.Configuration>(Jetty)
 
 class JettyEngineHttp2ContentTest :
-    ContentTestSuite<JettyApplicationEngine, JettyApplicationEngineBase.Configuration>(Jetty)
+    ContentTestSuite<JettyApplicationEngine, JettyApplicationEngineBase.Configuration>(Jetty) {
+    init {
+        enableSsl = true
+        enableCertVerify = true
+    }
+}
 
 class JettyEngineHttp2HttpServerTest :
     HttpServerTestSuite<JettyApplicationEngine, JettyApplicationEngineBase.Configuration>(Jetty)
